@@ -233,10 +233,12 @@ export class MobileProjectManager {
 			projectSelectionWasChanged = true;
 		}
 
+		var targetFrameworkWasChanged = false;
 		if (MobileProjectManager.Shared.StartupInfo.TargetFramework !== selectedTargetFramework)
 		{
 			MobileProjectManager.Shared.StartupInfo.TargetFramework = selectedTargetFramework;
 			projectSelectionWasChanged = true;
+			targetFrameworkWasChanged = true;
 		}
 		
 		var defaultConfig = "Debug";
@@ -296,7 +298,10 @@ export class MobileProjectManager {
 				});
 
 			MobileProjectManager.Shared.StartupInfo.Project = evaluatedProject;
-			MobileProjectManager.Shared.StartupInfo.Device = undefined;
+			//reset device only if target change
+			if (targetFrameworkWasChanged) {
+				MobileProjectManager.Shared.StartupInfo.Device = undefined;
+			}
 		}
 
 		if (selectedTargetFramework && MobileProjectManager.getProjectType(selectedTargetFramework) == ProjectType.MacCatalyst)
